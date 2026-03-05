@@ -1,4 +1,4 @@
-# CustomerScore.io Renewal Flow
+# Customerscore.io Renewal Flow
 
 AI-powered **customer renewal analysis and engagement automation
 workflow** built with n8n.
