@@ -1,257 +1,183 @@
-# AI Renewal automation for SaaS (n8n template)
+# 🤖 AI-Powered Renewal Automation Flow
 
-### 1️⃣ Wakes up every morning
+> **Generates tens of thousands in MRR** by automating customer renewal outreach with AI-driven personalisation, churn detection, and intelligent routing.
 
-### 2️⃣ Pulls customers close to renewal
-
-### 3️⃣ Analyzes churn risk and expansion signals
-
-### 4️⃣ Creates retention strategy
-
-- **For Big accounts**: drafts emails, creates HubSpot tasks, sends Slack alerts
-- For **Low touch**: Triggers personalized email sequence
-
-## What This Template Does
-
-This n8n workflow automatically pulls customers who are about to renew, analyzes the customer health data and executes personalized retention strategies at scale. It combines AI decision-making with automated outreach to save at-risk customers and identify expansion opportunities.
-
-![Frame 39819.png](attachment:8d34bec0-7837-457d-b73a-7e799144b0f8:Frame_39819.png)
-
-**Key capabilities:**
-
-- Analyzes customer health and usage trends
-- Deducts key opportunities and risks
-- Drafts super personalized email drafts for CSMs to send
-- Handles low-value accounts via automated email campaigns
-- Personalizes all outreach using your company's playbooks and talking points
-
-## n8n template .json
-
-You can load this into your n8n and customize the flow
-
-<aside>
-🆘
-
-## Need this, but cannot use n8n?
-
-No worries. We can help you implement this workflow and set-up health scoring.
-
-</aside>
+![AI Renewal Flow Overview](./flow-overview.png)
 
 ---
 
-## How It Works
+## 📖 Overview
 
-### 1. **Data Collection**
+This automation flow uses AI agents to identify at-risk and high-potential customer accounts, craft personalised renewal strategies, and execute outreach — all without manual intervention. It routes customers into **high-touch** or **low-touch** tracks based on engagement level, ensuring the right message reaches the right account at the right time.
 
-![CleanShot 2026-02-25 at 09.54.17@2x.png](attachment:ad79c4d4-56af-498e-9a28-77d7cec9af89:CleanShot_2026-02-25_at_09.54.172x.png)
-
-The workflow pulls customer data from CustomerScore.io (or your customer health platform) including:
-
-- Engagement scores and trends
-- Seat utilization and usage metrics
-- Support ticket patterns
-- Time in product, features adopted, integrations enabled
-
-### 2. **AI Strategic Analysis**
-
-![CleanShot 2026-02-25 at 09.54.39@2x.png](attachment:11f5aa08-aeb8-4b79-8428-5d3dc2d1c3ac:CleanShot_2026-02-25_at_09.54.392x.png)
-
-The **Retention Strategist** AI agent analyzes each customer holistically and determines:
-
-- **Strategic Segment**: Churn Risk / Expansion / Neutral
-- **Engagement Level**: High-Touch (human CSM) / Low-Touch (automation)
-- **Urgency**: Immediate / High / Moderate / Low
-- **Key Risks & Opportunities**: Specific insights about each customer
-- **Recommended Actions**: Tactical next steps based on your playbooks
-
-### 3. **Intelligent Routing**
-
-![CleanShot 2026-02-25 at 09.56.49@2x.png](attachment:24d4891b-7d99-4b3c-8a30-f548f3856c6a:CleanShot_2026-02-25_at_09.56.492x.png)
-
-**High-Touch Path** 
-
-- **AI drafts personalized email** using your playbook talking points
-- **Creates HubSpot task** for CSM follow-up with full context
-- **Sends Slack alert** to CSM team with urgency level and action required
-
-**Low-Touch Path** (for lower-value accounts):
-
-- **AI selects optimal Customer.io campaign** based on situation
-- **Sends event trigger** with personalization data (pain points, opportunities, offer type)
-- **Customer receives automated sequence** tailored to their specific needs
-
-**Neutral Path** (healthy customers):
-
-- Does not trigger anything in this flow
-
-## Setup Guide
-
-### Step 1: Import the Template
-
-1. Download the `CustomerScore.io Renewal Flow` file
-2. In n8n, click **+ → Import from File**
-3. Select the downloaded JSON file
-4. The workflow will appear with all nodes pre-configured
-
-### Step 2: Connect Your Customer Health Platform
-
-**Option A: Using CustomerScore.io**
-
-- If you are current customer message us and we help you set this up
-
-**Option B: Using another platform** 
-
-- You can use this by combining data from Mixpanel + Stripe (just example), but this will require some heavy lifting on you side. [Customerscore.io](http://Customerscore.io) does the data heavy lifting here.
-
-<aside>
-🚥
-
-## Not scoring your customers health yet?
-
-[Customerscore.io](http://Customerscore.io) uses custom Machine learning to score your customers and power workflows like this one. 
-
-</aside>
-
-### Step 3: Configure Your Credentials
-
-Update these credential IDs in the workflow:
-
-**OpenAI API** (3 nodes need this):
-
-- Retention Strategist Model
-- High Touch Model
-- Low Touch Model
-
-**Gmail** (1 node):
-
-- Gmail node
-
-**HubSpot** (1 node):
-
-- HubSpot Task node
-
-**Slack** (1 node):
-
-- Send Slack Alert node
-- Also update the channel ID to your CSM team channel
-
-**Customer.io** (2 nodes):
-
-- Customer.io Low Touch
-- Customer.io Neutral
-
-### Step 4: Customize Your Playbooks
-
-**Edit the "Company description & Playbooks" node:**
-
-1. Click on the Set node named **"Company description & Playbooks"**
-2. Update the **Company description** field:
-    - Replace "DealFlow Pro" with your company/product name
-    - Update metric definitions to match YOUR metrics
-    - Define what "healthy" vs "unhealthy" looks like for YOUR product
-    - Include your specific feature names and terminology
-3. Update the **Retention playbooks** field:
-    - Add your churn risk intervention strategies
-    - Include your expansion/upsell tactics with pricing tiers
-    - Add specific talking points your CSMs should use
-    - Include ROI calculations and value props for each tier
-
-**Why this matters:** The AI agents reference these playbooks directly when drafting emails and selecting campaigns. Your actual company language makes the outreach feel authentic, not generic.
-
-### Step 5: Test the Workflow
-
-**Test with a single customer:**
-
-1. Click **"Execute Workflow"** in n8n
-2. The workflow will process one customer through the entire flow
-3. Check the outputs at each stage:
-    - ✅ Retention Strategist correctly identifies segment and touch level
-    - ✅ High-Touch creates draft email in Gmail
-    - ✅ High-Touch creates task in HubSpot
-    - ✅ High-Touch sends Slack alert to correct channel
-    - ✅ Low-Touch sends correct event to Customer.io
-    - ✅ Neutral sends renewal_nurture event
-4. Verify the AI-generated content is high quality:
-    - Does the email reference actual customer data?
-    - Are the talking points from your playbook?
-    - Is the Slack alert actionable?
-
-**Common issues:**
-
-- **"Cannot read property 'name' of undefined"** → Check that CustomerScore data includes all required fields
-- **Gmail draft not created** → Verify Gmail credentials and permissions
-- **Slack message fails** → Confirm channel ID is correct
-- **Customer.io event not received** → Check API credentials and event names match your campaigns
-
-### Step 7: Set Up Automation
-
-**Schedule the workflow to run automatically:**
-
-1. Add a **Schedule Trigger** node at the beginning
-2. Configure run frequency:
-    - **Daily** - Standard for most companies (checks all customers once per day)
-    - **Twice daily** - For high-velocity businesses
-    - **Weekly** - For longer sales cycles
-3. Add a **Limit** node after the trigger to control batch size:
-    - Start with 10 customers per run while testing
-    - Increase to 50-100 once stable
-    - Monitor OpenAI API costs
-
-**Pro tip:** Set up separate workflows for different customer segments:
-
-- **Critical Customers** - Run daily for accounts >$5K MRR or <14 days to renewal
-- **Standard Customers** - Run 2x/week for most accounts
-- **Low-Value Customers** - Run weekly for <$500 MRR
+Built on [Customerscore.io](https://customerscore.io), the flow integrates with OpenAI, HubSpot, Gmail, and Slack to close the loop from data to action.
 
 ---
 
-## Customization Ideas
+## 🗺️ Flow Architecture
 
-### Adjust MRR Thresholds
+The flow is composed of three main stages:
 
-The default high-touch threshold is **$1,500 MRR**. To change it:
-
-1. Edit the **Retention Strategist** system prompt
-2. Find the "High-Touch" definition section
-3. Update: `High MRR customers (≥$1,500/month)` to your threshold
-4. Also update examples at the bottom of the prompt
-
-### Add More Channels
-
-**Want to add SMS alerts?**
-
-1. Add a Twilio node after the High-Touch AI Agent
-2. Connect it parallel to Gmail/HubSpot/Slack
-3. Reference `$json.output.slack_message.text` for content
-
-**Want to post to a Notion database?**
-
-1. Add a Notion node after the Retention Strategist
-2. Create a new database entry with customer analysis
-3. Use for CSM review dashboards
-
-### Add Human-in-the-Loop Approval
-
-For critical accounts, require CSM approval before sending:
-
-1. Add a Wait node after AI agent
-2. Send approval request via email/Slack
-3. CSM clicks "Approve" or "Edit"
-4. Workflow proceeds or pauses for manual adjustment
+1. **Data Ingestion** — Pull customer health and context data
+2. **Strategy & Filtering** — AI analyses engagement, scores risk, and routes accounts
+3. **Execution** — Personalised outreach via high-touch or low-touch tracks
 
 ---
 
-# Done-For-You Setup
+## 🔢 Stage 1 — Data Ingestion
 
-**Want us to set this up for you?**
+![Data Ingestion](./step1-data-ingestion.png)
 
-We offer white-glove implementation of this retention automation:
+| Node | Description |
+|------|-------------|
+| **Trigger** | Scheduled or event-based trigger that kicks off the flow |
+| **Company description & Playbooks** | Manually supplied company context and renewal playbooks used to ground the AI |
+| **Customerscore.io** | Pulls live customer health scores and static account data |
 
-- ✅ Custom playbook development based on your product
-- ✅ CustomerScore.io configuration and health scoring
-- ✅ Customer.io campaign design and copywriting
-- ✅ Full workflow setup and testing
-- ✅ 30-day optimization and tuning
+The **Get customer data** step collects both real-time health metrics and historical static data for each account — providing the AI agents with full context before any analysis begins.
 
-**Interested?** 👉 [Book a call](https://www.customerscore.io/book-a-demo) or email us at [patrik@customerscore.io](mailto:patrik@customerscore.io)
+---
+
+## 🧠 Stage 2 — Strategy & Filtering
+
+![Strategy and Filter](./step2-strategy-filter.png)
+
+### Retention Strategist Agent
+
+The **Retention Strategist** is an AI agent (powered by OpenAI Chat Model + Structured Output Parser) that:
+
+- Analyses engagement data and trends
+- Identifies churn risk signals and expansion opportunities
+- Crafts a personalised retention strategy per account
+
+Sub-components:
+- `Chat Mode` + `Memory` — maintains context across reasoning steps
+- `Tool` + `Output Parser` — produces structured, machine-readable strategy outputs
+
+### Filter
+
+Only accounts with **churn risk** or **expansion potential** pass through to execution. Neutral-risk accounts are dropped, keeping the flow focused on accounts that matter.
+
+### Route by Engagement Level
+
+A rules-based router segments accounts into three tracks:
+
+| Route | Description |
+|-------|-------------|
+| `high_touch` | High MRR accounts requiring human involvement |
+| `low_touch` | Lower MRR accounts suitable for automated sequences |
+| `neutral_risk` | No action taken |
+
+---
+
+## ⚡ Stage 3 — Execution
+
+![Execution](./step3-execution.png)
+
+These agents take the strategy from the Retention Strategist and craft personalised messaging for each track.
+
+---
+
+### 🤝 High Touch Track — Human Touch
+
+> For high MRR accounts, nothing is sent automatically. Only drafts and alerts are created to help the CS team react quickly.
+
+The **High Touch AI Agent** (OpenAI model + structured output parser) generates account-specific messaging and triggers:
+
+| Action | Tool | Details |
+|--------|------|---------|
+| Create Gmail Draft | Gmail | Drafts a personalised renewal email for CS review |
+| Create HubSpot Task | HubSpot | Creates an engagement task in the CRM (`create: engagement`) |
+| Send Slack Alert | Slack | Posts a real-time alert to the CS team (`post: message`) |
+
+---
+
+### 📧 Low Touch Track — Tech Touch
+
+> Low touch customers are sent a personalised renewal sequence with specific offers based on their engagement level.
+
+The **Low Touch AI Agent** generates account-specific messaging and triggers:
+
+| Action | Tool | Details |
+|--------|------|---------|
+| Run low touch personalised sequence | Automation | Enrols the customer in a targeted renewal sequence (`track: event`) |
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Tool |
+|-----------|------|
+| Automation platform | [n8n](https://n8n.io) |
+| Customer data | [Customerscore.io](https://customerscore.io) |
+| AI model | OpenAI GPT-4 (Chat Model) |
+| CRM | HubSpot |
+| Email | Gmail |
+| Alerts | Slack |
+| Sequence runner | Customer engagement platform (track: event) |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Access to [Customerscore.io](https://customerscore.io) with API credentials
+- OpenAI API key
+- HubSpot account with API access
+- Gmail OAuth credentials
+- Slack bot token with `chat:write` permission
+- n8n instance (self-hosted or cloud)
+
+### Setup
+
+1. **Clone this repository**
+   ```bash
+   git clone https://github.com/your-org/ai-renewal-flow.git
+   cd ai-renewal-flow
+   ```
+
+2. **Import the workflow** into your n8n instance using the provided JSON file.
+
+3. **Configure credentials** in n8n for:
+   - Customerscore.io
+   - OpenAI
+   - HubSpot
+   - Gmail
+   - Slack
+
+4. **Update the Company description & Playbooks node** with your company's context, renewal playbooks, and tone guidelines.
+
+5. **Set your trigger** — configure the schedule or event that should kick off the flow (e.g. 90 days before renewal date).
+
+6. **Activate** the workflow.
+
+---
+
+## 🔄 Flow Summary
+
+```
+Trigger
+  └─► Company description & Playbooks
+        └─► Customerscore.io (Get customer data)
+              └─► Retention Strategist AI Agent
+                    └─► Filter (churn risk / expansion potential only)
+                          └─► Route by Engagement Level
+                                ├─► high_touch ─► High Touch AI Agent
+                                │                     ├─► Create Gmail Draft
+                                │                     ├─► Create HubSpot Task
+                                │                     └─► Send Slack Alert
+                                ├─► low_touch  ─► Low Touch AI Agent
+                                │                     └─► Run personalised sequence
+                                └─► neutral_risk ─► (no action)
+```
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](./LICENSE) for details.
+
+---
+
+Built with ❤️ by [Customerscore.io](https://customerscore.io)
