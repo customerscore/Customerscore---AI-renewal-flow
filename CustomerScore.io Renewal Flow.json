@@ -1,0 +1,737 @@
+{
+  "name": "CustomerScore.io Renewal Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -1152,
+        992
+      ],
+      "id": "e4f6093a-9bed-4c42-b4c5-7ef4352846a8",
+      "name": "OpenAI Chat Model4",
+      "credentials": {
+        "openAiApi": {
+          "id": "b8R6zdhL5ba9Teud",
+          "name": "Cusomerscore.io test"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"strategic_segment\": {\n      \"type\": \"string\",\n      \"enum\": [\"churn_risk\", \"expansion\", \"neutral\"],\n      \"description\": \"The strategic segment this customer belongs to\"\n    },\n    \"engagement_level\": {\n      \"type\": \"string\",\n      \"enum\": [\"high_touch\", \"low_touch\"],\n      \"description\": \"Whether this customer requires human CSM intervention or can be handled via automation\"\n    },\n    \"confidence\": {\n      \"type\": \"string\",\n      \"enum\": [\"high\", \"medium\", \"low\"],\n      \"description\": \"Confidence level in this decision\"\n    },\n    \"primary_insight\": {\n      \"type\": \"string\",\n      \"description\": \"One key observation driving this decision (1-2 sentences)\"\n    },\n    \"key_risks\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Specific risks identified\"\n    },\n    \"key_opportunities\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Growth signals or positive indicators\"\n    },\n    \"recommended_next_steps\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Specific actions to take\"\n    },\n    \"urgency_level\": {\n      \"type\": \"string\",\n      \"enum\": [\"immediate\", \"high\", \"moderate\", \"low\"],\n      \"description\": \"How quickly action needs to be taken\"\n    },\n    \"reasoning_for_touch_level\": {\n      \"type\": \"string\",\n      \"description\": \"Brief explanation why high-touch or low-touch was chosen (1 sentence)\"\n    }\n  },\n  \"required\": [\n    \"strategic_segment\",\n    \"engagement_level\",\n    \"confidence\",\n    \"primary_insight\",\n    \"key_risks\",\n    \"key_opportunities\",\n    \"recommended_next_steps\",\n    \"urgency_level\",\n    \"reasoning_for_touch_level\"\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -1008,
+        992
+      ],
+      "id": "03a6f11d-70ec-477b-9997-68c809ba24bb",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1856,
+        768
+      ],
+      "id": "63891e87-3e3c-45d1-831b-b566267c1cfe",
+      "name": "Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "965f3534-fff3-46ca-84c0-bc27090d4531",
+              "name": "Company description",
+              "value": "=# DealFlow Pro - Customer Success Playbook\n\n## Company Overview\n\n**Company Name:** DealFlow Pro  \n**Product:** Sales Pipeline Intelligence Platform  \n**What We Do:** B2B SaaS platform that helps sales teams track deals, forecast revenue, and optimize their sales pipeline using AI-powered insights.\n\n## Understanding Our Metrics\n\n**Active Plugins** = Integrations enabled\n- Available: Gmail, Salesforce, HubSpot, Slack, Zapier, LinkedIn, Calendar, Webhooks, Analytics, Custom\n- Healthy: 5+ plugins\n- Power Users: 8+ plugins\n\n**Time in Product** = Minutes spent in platform per month\n- Healthy: 200+ minutes/month\n- Power Users: 500+ minutes/month\n- At Risk: <50 minutes/month\n\n**Deals** = Number of deals tracked in the system\n- Healthy: 30+ active deals\n- Heavy Usage: 50+ deals\n- At Risk: <10 deals\n\n**Active Users** = Users who logged in within last 30 days\n- Healthy: 70%+ of seats utilized\n- At Capacity: 90%+ of seats utilized\n- At Risk: <50% seat utilization\n\n**Support Tickets**\n- Healthy: Ticket close rate >80%, minimal backlog\n- At Risk: 10+ open tickets, low close rate\n\n---\n\n## What Healthy Customers Look Like\n\n### Engagement Pattern\n- Logs in **at least 3x per week** (ideally daily)\n- Engagement score consistently **above 20**\n- Multiple team members actively using the platform\n- Trending **upward or stable** engagement over time\n\n### Feature Adoption\n- Using **3+ integrations** (especially CRM integration)\n- **5+ active plugins** enabled\n- Using advanced features like:\n  - AI deal scoring\n  - Revenue forecasting\n  - Team analytics\n  - Custom dashboards\n\n### Usage Behavior\n- Tracking **30+ active deals** consistently\n- Spending **200+ minutes/month** in product\n- Deal volume **growing month-over-month**\n- Creating custom reports and dashboards\n\n### Team Health\n- **70%+ seat utilization**\n- Multiple power users on the team\n- New users being added as team grows\n- Cross-functional usage (sales, management, ops)\n\n### Support Patterns\n- Proactive ticket creation (asking \"how do I...\" not \"this is broken\")\n- **High ticket close rate** (>80%)\n- Quick response times to our outreach\n- Visiting help docs and resources regularly\n\n### Key Indicators of Success\n✅ Daily logins from multiple team members  \n✅ CRM integration actively syncing deals  \n✅ Using advanced features beyond basic pipeline  \n✅ Growing deal volume month-over-month  \n✅ Quick support response times  \n✅ High website traffic to docs/resources  \n\n---\n\n## What Unhealthy Customers Look Like\n\n### Engagement Pattern\n- Logins **less than weekly** (or weeks without login)\n- Engagement score **below 0** (especially below -20)\n- Only 1 user active (usually admin who set it up)\n- **Declining or erratic** engagement trend\n\n### Feature Adoption\n- **No integrations** enabled (still doing manual data entry)\n- Using **only basic features** despite being on higher-tier plan\n- 0-2 plugins enabled\n- Never touched advanced features\n\n### Usage Behavior\n- Tracking **few deals** (<10) or declining deal count\n- **Minimal time** in product (<50 min/month)\n- No custom dashboards or reports created\n- Zero or declining deals tracked\n\n### Team Health\n- **Low seat utilization** (<50%) despite having 10+ seats purchased\n- Only 1-2 users active out of entire team\n- No new users added in months\n- Team size shrinking (seats removed)\n\n### Support Patterns\n- **Support ticket backlog** (10+ open tickets)\n- Tickets about broken integrations or login issues\n- Slow response times to our emails\n- Repeated issues that aren't being resolved\n- Radio silence when we reach out\n\n### Key Warning Signs\n⚠️ Days/weeks since last login  \n⚠️ Only 1-2 users active despite having 10+ seats  \n⚠️ No CRM integration (manual data entry only)  \n⚠️ Deal count declining month-over-month  \n⚠️ Support tickets going unanswered  \n⚠️ Zero plugin adoption beyond email  \n⚠️ On Scale/Enterprise plan but using Start-level features  ",
+              "type": "string"
+            },
+            {
+              "id": "e53908fd-a5a2-48bb-b51d-b009c8332c44",
+              "name": "Retention playbooks",
+              "value": "=## Churn Risk Playbook\n\n### Critical Churn Signals\n1. **Engagement score dropping below -20**\n2. **No logins for 30+ days**\n3. **Severe health metrics** (Days since last login score at -100)\n4. **Support ticket backlog** (10+ open tickets)\n5. **Declining deal volume** month-over-month\n6. **Low seat utilization** despite team size\n7. **No integrations enabled** after 60+ days\n8. **Only using basic features** on higher-tier plan\n\n### Intervention Strategy\n\n#### For High-Touch Customers (MRR ≥$1,500 or Critical Risk)\n**Immediate Actions:**\n1. **Slack alert to CSM** with all risk signals\n2. **CSM phone call within 24 hours** (not email - too easy to ignore)\n3. **Diagnose root cause:**\n   - Adoption issue? → Offer dedicated onboarding session\n   - Technical issue? → Escalate to engineering\n   - Wrong fit? → Discuss downgrade vs churn\n   - Budget cuts? → Explore discount or payment plan\n\n**Talking Points:**\n- \"I noticed your team's activity has dropped significantly. What's going on?\"\n- \"Are you getting the value you expected from DealFlow Pro?\"\n- \"What would make this more valuable for your team?\"\n- Reference specific usage data: \"I see only 2 of your 15 users logged in last month...\"\n\n**Rescue Tactics:**\n- **Onboarding refresh:** Dedicated 1:1 session to rebuild usage\n- **Feature unlock:** Show advanced features they're not using\n- **Integration setup:** Help connect their CRM (biggest stickiness driver)\n- **Discount offer:** 15-25% for 3-6 months (only if budget is the issue)\n- **Downgrade option:** Better to keep them at lower tier than lose them\n\n\n## Expansion Playbook\n\n### Expansion Signals\n1. **Seat utilization >85%** (running out of capacity)\n2. **8+ active plugins** (power users)\n3. **50+ deals** being tracked (heavy usage)\n4. **Strong engagement score** (>30) with rising trend\n5. **Heavy time in product** (>500 min/month)\n6. **On lower tier** with enterprise-level usage patterns\n7. **Requesting features** from higher tiers\n8. **Multiple integrations** actively being used\n\n### Upsell Strategy\n\n#### Start → Grow ($500 → $1,000)\n**Trigger:** 4-5 seats utilized, asking about CRM integration\n\n**Value Prop:**\n- \"You're at capacity on your Start plan. Let's unlock CRM integration for your team.\"\n- ROI: \"Save 5 hours/week on manual data entry = $X/month in time savings\"\n- Features to highlight: CRM integration, custom dashboards, email sequences\n\n**Talking Points:**\n- \"I see you're manually copying deals into Salesforce. With Grow, that syncs automatically.\"\n- \"Your team is maxed out at 5 seats. Grow gives you up to 15 as you scale.\"\n\n#### Grow → Scale ($1,000 → $1,500)\n**Trigger:** 12+ seats utilized, high deal volume (50+), asking about forecasting\n\n**Value Prop:**\n- \"You're ready for AI-powered insights. Let's unlock forecasting and analytics.\"\n- ROI: \"Better forecasting = more accurate hiring/budgeting decisions\"\n- Features to highlight: AI deal scoring, revenue forecasting, team analytics\n\n**Talking Points:**\n- \"With 50+ deals, you need AI scoring to prioritize which ones to focus on.\"\n- \"Your team is approaching 15 users. Scale gives you 30 seats plus priority support.\"\n\n#### Scale → Enterprise ($1,500 → $2,000+)\n**Trigger:** 25+ seats utilized, requesting custom features, security requirements\n\n**Value Prop:**\n- \"You need enterprise-grade security and a dedicated CSM.\"\n- ROI: Custom AI models tailored to your specific sales process\n- Features to highlight: SSO, custom AI models, dedicated CSM, white-label\n\n**Talking Points:**\n- \"At your scale, you need a dedicated CSM to optimize your team's workflow.\"\n- \"With unlimited seats, you can roll this out to sales ops, management, and beyond.\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1632,
+        768
+      ],
+      "id": "60f5f746-8781-4790-8ba4-93be34356223",
+      "name": "Company description & Playbooks"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "JUm8yfenot2rN28lVTfzZ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/JUm8yfenot2rN28lVTfzZ",
+          "cachedResultName": "Customerscore - pull customers"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1408,
+        768
+      ],
+      "id": "9b73ebcb-470c-4e0c-a59f-f16ab9ca649a",
+      "name": "Customerscore.io",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.engagement_level }}",
+                    "rightValue": "high_touch",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "89ebeef4-caba-4e05-8c0a-8023e6455818"
+                  },
+                  {
+                    "leftValue": "={{ $json.output.strategic_segment }}",
+                    "rightValue": "neutral",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "42b88b7a-65a1-4c27-ba85-6f3c83b927c2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "high_touch"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.engagement_level }}",
+                    "rightValue": "low_touch",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "04db2951-4982-4208-b2f9-08f903fcf953"
+                  },
+                  {
+                    "leftValue": "={{ $json.output.strategic_segment }}",
+                    "rightValue": "neutral",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "39b445b2-b0ba-4240-aa5e-5e15880bf7ed"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "low_touch"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.strategic_segment }}",
+                    "rightValue": "neutral",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "091f3280-3871-4f02-a0b3-4e142facec34"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "neutral_risk"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -800,
+        752
+      ],
+      "id": "ba6bd7f9-e7b8-4335-b4c6-e38ab50462f8",
+      "name": "Route by Engagement Level"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -576,
+        688
+      ],
+      "id": "2296d407-271a-4734-b0dc-c55e7b0602d6",
+      "name": "High Touch Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "b8R6zdhL5ba9Teud",
+          "name": "Cusomerscore.io test"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"email_draft\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"subject\": {\"type\": \"string\"},\n        \"body\": {\"type\": \"string\"},\n        \"recipient\": {\"type\": \"string\"}\n      },\n      \"required\": [\"subject\", \"body\", \"recipient\"]\n    },\n    \"hubspot_task\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"title\": {\"type\": \"string\"},\n        \"notes\": {\"type\": \"string\"},\n        \"priority\": {\"type\": \"string\"},\n        \"due_date\": {\"type\": \"string\"}\n      },\n      \"required\": [\"title\", \"notes\", \"priority\", \"due_date\"]\n    },\n    \"slack_message\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"text\": {\"type\": \"string\"}\n      },\n      \"required\": [\"text\"]\n    }\n  },\n  \"required\": [\"email_draft\", \"hubspot_task\", \"slack_message\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -448,
+        688
+      ],
+      "id": "9b0504d8-f58b-4fad-b888-97c0ab5ccbbf",
+      "name": "High Touch Output Parser"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "resource": "draft",
+        "subject": "={{ $json.output.email_draft.subject }}",
+        "message": "={{ $json.output.email_draft.body }}",
+        "options": {
+          "sendTo": "={{ $json.output.email_draft.recipient }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -224,
+        368
+      ],
+      "id": "f6408073-3ad2-4af5-9d60-1acf6a197931",
+      "name": "Create Gmail Draft",
+      "webhookId": "c3e1e762-65c7-4659-ac75-20ae2a2c4ca3"
+    },
+    {
+      "parameters": {
+        "resource": "engagement",
+        "type": "task",
+        "dueDate": "={{ $today }}",
+        "metadata": {
+          "body": "={{ $json.output.hubspot_task.notes }}",
+          "subject": "={{ $json.output.hubspot_task.title }}"
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.2,
+      "position": [
+        -224,
+        560
+      ],
+      "id": "316ba51c-f181-4def-8b01-d4d4d26e5f5f",
+      "name": "Create HubSpot Task"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "YOUR_CHANNEL_ID",
+          "mode": "list"
+        },
+        "text": "={{ $('High touch AI agent').item.json.output.slack_message.text }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        -224,
+        752
+      ],
+      "id": "69337a4a-c004-4907-8351-02c8b4291cef",
+      "name": "Send Slack Alert",
+      "webhookId": "dbbc25e6-a740-41dd-83c1-c1b5bb706e50",
+      "credentials": {
+        "slackApi": {
+          "id": "YVtnEKA8dg3W4ntE",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -576,
+        1184
+      ],
+      "id": "92776baa-5fd0-463b-94a6-220403cebadf",
+      "name": "Low Touch Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "b8R6zdhL5ba9Teud",
+          "name": "Cusomerscore.io test"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"event_name\": {\n      \"type\": \"string\",\n      \"enum\": [\"churn_save_urgent\", \"churn_save_gentle\", \"churn_save_adoption\", \"expansion_capacity_alert\", \"expansion_upsell_offer\"]\n    },\n    \"event_data\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"customer_id\": {\"type\": \"string\"},\n        \"customer_name\": {\"type\": \"string\"},\n        \"segment\": {\"type\": \"string\"},\n        \"offer_type\": {\"type\": \"string\"},\n        \"pain_points\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}},\n        \"opportunities\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}},\n        \"feature_highlights\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}},\n        \"mrr\": {\"type\": \"number\"},\n        \"plan\": {\"type\": \"string\"},\n        \"days_until_renewal\": {\"type\": \"number\"},\n        \"engagement_score\": {\"type\": \"number\"}\n      }\n    }\n  },\n  \"required\": [\"event_name\", \"event_data\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -448,
+        1184
+      ],
+      "id": "42631c0f-d67f-4374-b66b-a465e55ea13c",
+      "name": "Low Touch Output Parser"
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "customerId": "={{ $json.output.event_data.customer_id }}",
+        "eventName": "={{ $json.output.event_name }}",
+        "jsonParameters": true,
+        "additionalFieldsJson": "={{ $json.output.event_data }}"
+      },
+      "type": "n8n-nodes-base.customerIo",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        960
+      ],
+      "id": "903b17a0-7521-4b29-8407-c9b69a82c230",
+      "name": "Run low touch personalised sequence"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=CUSTOMER DATA:\nCUSTOMER DATA:\nCompany: {{ $('Customerscore.io').item.json.name }}\nMRR: ${{ $('Customerscore.io').item.json.mrr }}\nPlan: {{ $('Customerscore.io').item.json.plan }}\nDays Until Renewal: {{ $('Customerscore.io').item.json.days_until_renewal }}\nEngagement Score: {{ $('Customerscore.io').item.json.engagementscore }}\nSeat Utilization: {{ $('Customerscore.io').item.json.seat_utilization_percent }}%\nActive Plugins: {{ $('Customerscore.io').item.json.active_plugins }}\nDeals: {{ $('Customerscore.io').item.json.deals }}\n\nSTRATEGIST ANALYSIS:\nSegment: {{ $json.output.strategic_segment }}\nPrimary Insight: {{ $json.output.primary_insight }}\nKey Risks: {{ $json.output.key_risks.join(', ') }}\nKey Opportunities: {{ $json.output.key_opportunities.join(', ') }}\nUrgency: {{ $json.output.urgency_level }}\n\nYour task: Choose the right automated campaign for this {{ $json.output.strategic_segment }} customer.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are an automation specialist selecting the optimal Customer.io campaign.\n\n**COMPANY CONTEXT:**\n{{ $('Company description & Playbooks').item.json['Company description'] }}\n\n**YOUR TASK:**\nBased on the strategist's analysis, choose the right automated email campaign and personalization data.\n\n**CAMPAIGN OPTIONS:**\n\n**For CHURN RISK customers:**\n1. `churn_save_urgent` - <14 days to renewal, critical situation\n   - 3 emails over 5 days\n   - Includes discount offer (15-25%)\n   - Aggressive save attempt\n\n2. `churn_save_gentle` - >14 days to renewal, moderate risk\n   - 3 emails over 14 days\n   - Educational content\n   - Soft re-engagement\n\n3. `churn_save_adoption` - Low usage, integration issues\n   - 4 emails over 10 days\n   - Onboarding focused\n   - Feature education\n\n**For EXPANSION customers:**\n1. `expansion_capacity_alert` - High seat utilization (>85%)\n   - Notify about capacity constraints\n   - Offer seat upgrade\n   - ROI focused\n\n2. `expansion_upsell_offer` - General expansion opportunity\n   - Showcase advanced features\n   - Tier upgrade benefits\n   - Use case examples\n\n**DECISION LOGIC:**\n\n**Churn Risk:**\n- Days until renewal <14 + urgency \"immediate/high\" → `churn_save_urgent`\n- Days until renewal >14 + moderate engagement issues → `churn_save_gentle`\n- Low usage + no integrations → `churn_save_adoption`\n\n**Expansion:**\n- Seat utilization >85% → `expansion_capacity_alert`\n- Strong engagement + power user behavior → `expansion_upsell_offer`\n\n**PERSONALIZATION DATA:**\nInclude specific data points that the email campaign can use:\n- `customer_id` - For tracking\n- `customer_name` - For personalization\n- `segment` - churn_risk or expansion\n- `offer_type` - Specific offer (e.g., \"15_percent_discount\", \"free_month\", \"priority_onboarding\")\n- `pain_points` - Array of specific issues\n- `opportunities` - Array of growth signals\n- `feature_highlights` - Array of features to showcase\n- `mrr` - For segmentation\n- `plan` - Current plan\n- `days_until_renewal` - Urgency context\n- `engagement_score` - Health metric\n\n**OUTPUT FORMAT (JSON):**\n{\n  \"event_name\": \"churn_save_urgent | churn_save_gentle | churn_save_adoption | expansion_capacity_alert | expansion_upsell_offer\",\n  \"event_data\": {\n    \"customer_id\": \"...\",\n    \"customer_name\": \"...\",\n    \"segment\": \"churn_risk | expansion\",\n    \"offer_type\": \"...\",\n    \"pain_points\": [\"...\"],\n    \"opportunities\": [\"...\"],\n    \"feature_highlights\": [\"...\"],\n    \"mrr\": 1000,\n    \"plan\": \"grow\",\n    \"days_until_renewal\": 30,\n    \"engagement_score\": 15\n  }\n}\n\n**EXAMPLES:**\n\nChurn Risk - Urgent:\n```json\n{\n  \"event_name\": \"churn_save_urgent\",\n  \"event_data\": {\n    \"customer_id\": \"808276\",\n    \"customer_name\": \"Acme Corp\",\n    \"segment\": \"churn_risk\",\n    \"offer_type\": \"20_percent_discount_3_months\",\n    \"pain_points\": [\"Low team adoption\", \"No CRM integration\", \"Support ticket backlog\"],\n    \"opportunities\": [\"Still has active users\", \"High deal volume potential\"],\n    \"feature_highlights\": [\"CRM integration\", \"Automated workflows\", \"Priority support\"],\n    \"mrr\": 1500,\n    \"plan\": \"grow\",\n    \"days_until_renewal\": 10,\n    \"engagement_score\": -15\n  }\n}\n```\n\nExpansion - Capacity:\n```json\n{\n  \"event_name\": \"expansion_capacity_alert\",\n  \"event_data\": {\n    \"customer_id\": \"808276\",\n    \"customer_name\": \"Acme Corp\",\n    \"segment\": \"expansion\",\n    \"offer_type\": \"scale_plan_upgrade\",\n    \"pain_points\": [\"At seat capacity\", \"Limited to 15 users\"],\n    \"opportunities\": [\"100% seat utilization\", \"Power user behavior\", \"50+ deals tracked\"],\n    \"feature_highlights\": [\"30 seats on Scale plan\", \"AI forecasting\", \"Advanced analytics\"],\n    \"mrr\": 1000,\n    \"plan\": \"grow\",\n    \"days_until_renewal\": 45,\n    \"engagement_score\": 42\n  }\n}\n```\n\nOutput ONLY valid JSON, no markdown formatting."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -576,
+        960
+      ],
+      "id": "e73432ea-82bb-4b7f-8c5a-4debca521648",
+      "name": "Low touch AI agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=CUSTOMER DATA:\nCompany: {{ $('Customerscore.io').item.json.name }}\nMRR: ${{ $('Customerscore.io').item.json.mrr }}\nPlan: {{ $('Customerscore.io').item.json.plan }}\nDays Until Renewal: {{ $('Customerscore.io').item.json.days_until_renewal }}\nEngagement Score: {{ $('Customerscore.io').item.json.engagementscore }}\nSeat Utilization: {{ $('Customerscore.io').item.json.seat_utilization_percent }}%\nActive Plugins: {{ $('Customerscore.io').item.json.active_plugins }}\nDeals: {{ $('Customerscore.io').item.json.deals }}\n\nSTRATEGIST ANALYSIS:\nSegment: {{ $json.output.strategic_segment }}\nPrimary Insight: {{ $json.output.primary_insight }}\nKey Risks: {{ $json.output.key_risks.join(', ') }}\nKey Opportunities: {{ $json.output.key_opportunities.join(', ') }}\nRecommended Actions: {{ $json.output.recommended_next_steps.join(', ') }}\nUrgency: {{ $json.output.urgency_level }}\n\nYour task: Create personalized high-touch outreach for this {{ $json.output.strategic_segment }} customer.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a Senior Customer Success Manager drafting personalized high-touch outreach.\n\n**COMPANY CONTEXT:**\n{{ $('Company description & Playbooks').item.json['Company description'] }}\n\n**PLAYBOOKS:**\n{{ $('Company description & Playbooks').item.json['Retention playbooks'] }}\n\n**YOUR TASK:**\nBased on the strategist's analysis, create:\n1. **Email Draft** - Personalized email to the customer\n2. **HubSpot Task** - Internal task for CSM follow-up\n3. **Slack Alert** - Notification to CSM team\n\n**CRITICAL RULES:**\n\n**For CHURN RISK customers:**\n- Email tone: Empathetic, problem-solving, helpful (not salesy)\n- Reference SPECIFIC usage drops (\"engagement dropped 60%\")\n- Offer concrete help (onboarding refresh, integration setup, etc.)\n- Use playbook rescue tactics\n- Subject line: Personal, references specific issue\n\n**For EXPANSION customers:**\n- Email tone: Value-focused, ROI-driven, strategic\n- Reference SPECIFIC usage patterns (\"tracking 50+ deals\")\n- Highlight capacity constraints or power user behavior\n- Use playbook upsell strategies and talking points\n- Subject line: Opportunity-focused\n\n**EMAIL GUIDELINES:**\n- Keep under 150 words\n- Reference actual customer data\n- Use company-specific feature names from playbook\n- Include clear call-to-action\n- Recipient email: Use customer contact email if available, otherwise use placeholder\n\n**HUBSPOT TASK GUIDELINES:**\n- Title: Specific action (e.g., \"Call Acme Corp about engagement drop\")\n- Notes: Include ALL context from strategist analysis\n- Priority: immediate/high/moderate based on urgency_level\n- Due date: Based on days_until_renewal and urgency\n\n**SLACK ALERT GUIDELINES:**\n- Start with urgency emoji (🚨 critical, ⚠️ high, 📊 moderate)\n- Include customer name, MRR, segment\n- Summarize key risks/opportunities\n- Include clear action required\n- Mention \"Gmail draft created\" and \"HubSpot task created\"\n\n**OUTPUT FORMAT (JSON):**\n{\n  \"email_draft\": {\n    \"subject\": \"...\",\n    \"body\": \"...\",\n    \"recipient\": \"customer@example.com\"\n  },\n  \"hubspot_task\": {\n    \"title\": \"...\",\n    \"notes\": \"...\",\n    \"priority\": \"high\",\n    \"due_date\": \"2026-03-15\"\n  },\n  \"slack_message\": {\n    \"text\": \"🚨 ...\"\n  }\n}\n\n**EXAMPLES:**\n\nChurn Risk Example:\n```json\n{\n  \"email_draft\": {\n    \"subject\": \"Quick check-in about your team's DealFlow usage\",\n    \"body\": \"Hi [Name],\\n\\nI noticed your team's activity has dropped significantly over the past month - from daily logins to just a few times per week. I want to make sure you're getting the value you expected from DealFlow Pro.\\n\\nI see only 3 of your 10 users are actively logging in. Is there something blocking adoption? I'd love to jump on a quick call to understand what's happening and help get your team back on track.\\n\\nWould Thursday at 2pm work for a 15-minute call?\\n\\nBest,\\n[CSM Name]\",\n    \"recipient\": \"contact@customer.com\"\n  },\n  \"hubspot_task\": {\n    \"title\": \"URGENT: Call Acme Corp about 70% engagement drop\",\n    \"notes\": \"Churn Risk - High Touch\\n\\nKey Risks:\\n- Engagement dropped from 45 to 12 in 2 weeks\\n- Only 3/10 users active\\n- 15 days until renewal\\n\\nRecommended Actions:\\n- Schedule call within 24 hours\\n- Diagnose adoption barriers\\n- Offer onboarding refresh\\n\\nEmail draft created in Gmail.\",\n    \"priority\": \"high\",\n    \"due_date\": \"2026-02-24\"\n  },\n  \"slack_message\": {\n    \"text\": \"🚨 CHURN RISK ALERT\\n\\n**Customer:** Acme Corp\\n**MRR:** $2,500\\n**Renewal:** 15 days\\n\\n**Issue:** Engagement dropped 70% in 2 weeks. Only 3/10 users active.\\n\\n**Risks:**\\n- Rapidly declining usage\\n- Low adoption across team\\n- High-value account at risk\\n\\n**Action Required:** Call customer within 24 hours\\n\\n✅ Gmail draft created\\n✅ HubSpot task created (high priority)\"\n  }\n}\n```\n\nExpansion Example:\n```json\n{\n  \"email_draft\": {\n    \"subject\": \"Your team is ready for AI-powered forecasting\",\n    \"body\": \"Hi [Name],\\n\\nGreat news - I can see your team is crushing it with DealFlow! You're tracking 50+ deals and have all 15 seats actively being used.\\n\\nBased on your usage patterns, you're ready for our Scale plan's AI deal scoring and revenue forecasting features. With your deal volume, this could save your team 10+ hours per week on pipeline analysis.\\n\\nWant to see a quick demo of how forecasting would work with your current pipeline?\\n\\nBest,\\n[CSM Name]\",\n    \"recipient\": \"contact@customer.com\"\n  },\n  \"hubspot_task\": {\n    \"title\": \"Expansion opportunity: Acme Corp ready for Scale plan\",\n    \"notes\": \"Expansion - High Touch\\n\\nKey Opportunities:\\n- 50+ deals tracked (heavy usage)\\n- 100% seat utilization (at capacity)\\n- Power user behavior\\n\\nRecommended Upsell:\\n- Grow → Scale ($1,000 → $1,500)\\n- Highlight AI forecasting ROI\\n- Offer demo of advanced features\\n\\nEmail draft created in Gmail.\",\n    \"priority\": \"moderate\",\n    \"due_date\": \"2026-03-01\"\n  },\n  \"slack_message\": {\n    \"text\": \"📈 EXPANSION OPPORTUNITY\\n\\n**Customer:** Acme Corp\\n**MRR:** $1,200 (Grow plan)\\n**Upsell Potential:** $1,500 (Scale plan)\\n\\n**Opportunity:** Team at capacity (15/15 seats) with heavy usage (50+ deals tracked)\\n\\n**Key Signals:**\\n- Power user behavior\\n- Ready for AI features\\n- Strong engagement trend\\n\\n**Action Required:** Schedule demo call this week\\n\\n✅ Gmail draft created\\n✅ HubSpot task created (moderate priority)\"\n  }\n}\n```\n\nOutput ONLY valid JSON, no markdown formatting."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -576,
+        464
+      ],
+      "id": "54154265-4b9e-47e8-ad43-b4c7237904c4",
+      "name": "High touch AI agent"
+    },
+    {
+      "parameters": {
+        "content": "## Get customer data\nNode that pulls customer health and static data",
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1408,
+        592
+      ],
+      "typeVersion": 1,
+      "id": "e384a676-a409-4dbe-8b8d-14dfa770c160",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Strategy\nThe retention strategist analyzes engagement data and trends and crafts personalised strategy",
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1152,
+        592
+      ],
+      "typeVersion": 1,
+      "id": "57e12b7c-835e-487e-a9ee-22db586c39bc",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Execution\nThese agents take the plan from the strategist and craft personalised messaging\n",
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -576,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "c22b45a9-710f-47b7-811f-671a706ffe08",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Human touch\nFor high MRR accounts nothing is sent. Only draft and alerts are created to help CS team react quickly.",
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "4b901712-3267-44f1-853d-51ff5ddba9e3",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Tech touch\nLow touch customers are sent personalised renewal sequnce with specific offers base on their engagement level.",
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        944
+      ],
+      "typeVersion": 1,
+      "id": "57182392-117f-496d-9b59-533b56b878b0",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Filter\nOnly customers with churn risk or expansion potential pass further.",
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -848,
+        576
+      ],
+      "typeVersion": 1,
+      "id": "812b3671-d4ff-4ded-9e7f-8466ab26b455",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "# AI renewal flow\n### That generates  tens of thousands in MRR",
+        "height": 272,
+        "width": 656,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1840,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "a60f7252-ad5b-43ef-8879-167f8e7eb186",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=COMPANY OVERVIEW:\nCompany: {{ $json.name }}\nMRR: ${{ $json.mrr }}\nPlan: {{ $json.plan }} ({{ $json.plan_interval }})\nTenure: {{ $json.tenure_months }} months\nDays Until Renewal: {{ $json.days_until_renewal }}\n\nENGAGEMENT HEALTH (Primary Signal):\nCurrent Engagement Score: {{ $json.engagementscore }}\nScore Change: {{ $json.engagementscore_difference }}\nTrend Direction: {{ $json.engagement_trend.direction }}\nTrend Momentum: {{ $json.engagement_trend.momentum }}\nChange Over Period: {{ $json.engagement_trend.change_percent }}%\nVolatility: {{ $json.engagement_trend.volatility }}\n\nHEALTH METRIC BREAKDOWN:\nTotal Metrics Tracked: {{ $json.health_score_summary.total_metrics }}\nExcellent Metrics: {{ $json.health_score_summary.excellent }}\nGood Metrics: {{ $json.health_score_summary.good }}\nFair Metrics: {{ $json.health_score_summary.fair }}\nPoor Metrics: {{ $json.health_score_summary.poor }}\nCritical Metrics: {{ $json.health_score_summary.critical }}\nSevere Metrics: {{ $json.health_score_summary.severe }}\n\nIndividual Health Scores:\n{{ JSON.stringify($json.health_scores, null, 2) }}\n\nUSAGE PATTERNS:\nSeat Utilization: {{ $json.seat_utilization_percent }}% ({{ $json.active_users }}/{{ $json.all_users }} users)\nSeats Remaining: {{ $json.seats_remaining }}\nActive Plugins: {{ $json.active_plugins }}\nTime in Product: {{ $json.time_in_product }}\nDeals/Activity: {{ $json.deals }}\nIntegrations Enabled: {{ $json.integrations_enabled }}\n\nSUPPORT & ENGAGEMENT:\nOpen Tickets: {{ $json.open_tickets }}\nTicket Close Rate: {{ $json.ticket_close_rate }}%\nNew Tickets: {{ $json.new_tickets }}\nClosed Tickets: {{ $json.closed_tickets }}\n\nBased on this comprehensive data, determine the strategic segment for this customer.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are an AI Retention Strategist analyzing customer health for SaaS renewals.\n\nYour job is to analyze customer data holistically and determine which strategic segment they belong to AND whether they require high-touch or low-touch engagement.\n\n**COMPANY & PRODUCT CONTEXT:**\n{{ $('Company description & Playbooks').item.json['Company description'] }}\n\n**STRATEGIC SEGMENTS:**\n- \"churn_risk\" - Customer showing declining engagement, problematic health metrics, or concerning behavioral patterns\n- \"expansion\" - Customer showing growth potential, high engagement, capacity constraints, or strong positive signals  \n- \"neutral\" - Healthy customer on track for standard renewal\n\n**ENGAGEMENT LEVEL (High-Touch vs Low-Touch):**\n\n**High-Touch** - Requires human CSM intervention:\n- High MRR customers (≥$600/month) regardless of health\n- Strategic expansion opportunities with significant upsell potential\n\n**Low-Touch** - Can be handled via automation:\n- Low MRR customers (<$600/month) who are healthy or have minor issues\n\n**YOUR ANALYSIS APPROACH:**\n\n1. PRIMARY SIGNAL - Engagement Score & Trend\n   - Look at current engagement score AND the trend direction/momentum\n   - A falling trend is often more important than the current score\n   - Consider volatility - erratic behavior can indicate problems\n\n2. HEALTH METRIC BREAKDOWN\n   - Which specific metrics are driving the score up or down?\n   - Are there critical/severe metrics that need attention?\n   - Do excellent metrics balance out poor ones, or is it uniformly bad?\n\n3. USAGE PATTERNS\n   - Seat utilization: High (>85%) suggests capacity constraints = expansion opportunity\n   - Plugin adoption, time in product, deals: Indicate depth of usage\n   - Low usage despite team size = adoption problem = churn risk\n\n4. BEHAVIORAL CONTEXT  \n   - Support ticket patterns: Backlog suggests problems, good close rate suggests satisfaction\n   - Tenure: Long-term customers have different risk profiles than new ones\n   - Integration: Integrated customers are stickier\n\n5. BUSINESS VALUE & URGENCY\n   - MRR level determines resource allocation\n   - Days until renewal affects timeline for intervention\n   - Complexity of the situation (multiple conflicting signals = needs human judgment)\n\n6. NUANCED THINKING\n   - A customer can have declining engagement BUT high seat utilization - could be expansion in disguise\n   - Severe individual metrics don't always mean churn risk if overall pattern is positive\n   - Consider if problems are solvable (adoption issue) vs fundamental (product fit)\n   - High-value customers get high-touch even if healthy (relationship management)\n\n**RETENTION PLAYBOOKS & GUIDANCE:**\n{{ $('Company description & Playbooks').item.json['Retention playbooks'] }}\n\n**WORKFLOW:**\n1. Review the company context and playbooks above\n2. Analyze customer data against healthy/unhealthy profiles\n3. Determine strategic segment (churn_risk/expansion/neutral)\n4. Determine engagement level (high_touch/low_touch) based on MRR, urgency, and complexity\n5. Reference specific playbook tactics (objection handling, expansion strategies, etc.) in your recommendations\n6. Make personalized recommendations combining customer data + playbook insights\n\n**OUTPUT FORMAT (JSON):**\n{\n  \"strategic_segment\": \"churn_risk | expansion | neutral\",\n  \"engagement_level\": \"high_touch | low_touch\",\n  \"confidence\": \"high | medium | low\",\n  \"primary_insight\": \"One key observation driving this decision (1-2 sentences)\",\n  \"key_risks\": [\"specific risks identified\"],\n  \"key_opportunities\": [\"growth signals or positive indicators\"],\n  \"recommended_next_steps\": [\"specific actions to take - reference playbook strategies\"],\n  \"urgency_level\": \"immediate | high | moderate | low\",\n  \"reasoning_for_touch_level\": \"Brief explanation why high-touch or low-touch (1 sentence)\"\n}\n\n**DECISION EXAMPLES:**\n\nExample 1: $3,000 MRR, healthy engagement, 45 days to renewal\n→ strategic_segment: \"neutral\"\n→ engagement_level: \"high_touch\" (high MRR warrants relationship management)\n\nExample 2: $800 MRR, declining engagement, 60 days to renewal\n→ strategic_segment: \"churn_risk\"\n→ engagement_level: \"low_touch\" (low MRR, enough time for automated sequence)\n\nExample 3: $2,500 MRR, critical engagement drop, 5 days to renewal\n→ strategic_segment: \"churn_risk\"\n→ engagement_level: \"high_touch\" (high value + critical + urgent)\n\nExample 4: $600 MRR, strong engagement, at capacity, 20 days to renewal\n→ strategic_segment: \"expansion\"\n→ engagement_level: \"low_touch\" (clear upsell but low value = automated email)\n\nExample 5: $5,000 MRR, at capacity, power user, excellent engagement\n→ strategic_segment: \"expansion\"\n→ engagement_level: \"high_touch\" (significant upsell potential warrants CSM call)\n\n**CRITICAL RULES:**\n- Make decisions based on the FULL PICTURE, not just thresholds\n- High MRR (≥$1,500) almost always means high-touch\n- Critical situations (immediate churn risk, <14 days, multiple severe metrics) always mean high-touch\n- Reference specific playbook strategies in your recommended_next_steps\n- Use company-specific language and features from the context provided\n- Be specific in risks and opportunities (not generic)\n- Output ONLY valid JSON, no markdown formatting"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1152,
+        768
+      ],
+      "id": "7b5bf309-82dc-414f-85ca-e3789cf7c158",
+      "name": "Retention Strategist"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Retention Strategist",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Retention Strategist",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger": {
+      "main": [
+        [
+          {
+            "node": "Company description & Playbooks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Company description & Playbooks": {
+      "main": [
+        [
+          {
+            "node": "Customerscore.io",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customerscore.io": {
+      "main": [
+        [
+          {
+            "node": "Retention Strategist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Engagement Level": {
+      "main": [
+        [
+          {
+            "node": "High touch AI agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Low touch AI agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "High Touch Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "High touch AI agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Touch Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "High touch AI agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Gmail Draft": {
+      "main": [
+        []
+      ]
+    },
+    "Create HubSpot Task": {
+      "main": [
+        []
+      ]
+    },
+    "Low Touch Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Low touch AI agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Low Touch Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Low touch AI agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Low touch AI agent": {
+      "main": [
+        [
+          {
+            "node": "Run low touch personalised sequence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High touch AI agent": {
+      "main": [
+        [
+          {
+            "node": "Create Gmail Draft",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create HubSpot Task",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retention Strategist": {
+      "main": [
+        [
+          {
+            "node": "Route by Engagement Level",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "b1c0322a-3960-45b3-bc70-6d1d5f3f59c8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5de18eec2536be7bac3cdc726328d1fe6b7e8cf7b7191971d54012e23f7ae0ae"
+  },
+  "id": "7H-rCKNDSd_dDnHt6a9Xf",
+  "tags": []
+}
