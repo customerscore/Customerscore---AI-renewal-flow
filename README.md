@@ -18,7 +18,7 @@ Depending on the risk and engagement level, it either: - Triggers
 
 The workflow runs on a schedule and performs the following steps:
 
-1.  Pulls customer data from a **CustomerScore workflow**
+1.  Pulls customer data from a **Customerscore workflow**
 2.  Uses AI to analyze engagement and renewal risk
 3.  Classifies customers into strategic segments
 4.  Routes them to either high-touch or low-touch engagement
@@ -237,7 +237,7 @@ Add credentials for:
 
 Update the Slack node channel ID.
 
-## 4. Connect CustomerScore Workflow
+## 4. Connect Customerscore Workflow
 
 Ensure the following workflow exists in your instance:
 
